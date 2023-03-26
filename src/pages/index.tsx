@@ -9,6 +9,7 @@ import { api } from "~/utils/api";
 const Home: NextPage = () => {
   //const hello = api.example.hello.useQuery({ text: "from tRPC" });
   const user = useUser();
+  const fullName = user.user?.fullName;
 
   return (
     <div className={styles.container}>
@@ -22,6 +23,7 @@ const Home: NextPage = () => {
         {!user.isSignedIn && <SignInButton />}
         {user.isSignedIn && (
           <>
+            <h1>{fullName}</h1>
             <h1 className={styles.title}>Wordle Tracker</h1>
 
             <div className={styles.grid}>
