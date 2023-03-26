@@ -15,7 +15,7 @@ const Home: NextPage = () => {
       <Head>
         <title>Wordle Tracking</title>
         <meta name="description" content="Track your Wordle group scores" />
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/favicon.png" />
       </Head>
 
       <main className={styles.main}>
