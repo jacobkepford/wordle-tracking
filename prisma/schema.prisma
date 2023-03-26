@@ -11,8 +11,19 @@ generator client {
     provider = "prisma-client-js"
 }
 
-model Example {
-    id        String   @id @default(cuid())
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+model Score {
+    score_id    Int      @id @default(autoincrement())
+    score_value Int
+    score_user  Int
+    score_date  DateTime @db.Date
+    create_date DateTime @default(now())
+
+    @@index([score_user])
+}
+
+model User {
+    user_id         Int      @id @default(autoincrement())
+    user_first_name String
+    user_last_name  String
+    create_date     DateTime @default(now())
 }
