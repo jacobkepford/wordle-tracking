@@ -22,7 +22,7 @@ const Home: NextPage = () => {
         {!user.isSignedIn && <SignInButton />}
         {user.isSignedIn && (
           <>
-            <h1 className="title">Wordle Tracker</h1>
+            <h1 className={styles.title}>Wordle Tracker</h1>
 
             <div className={styles.grid}>
               <Link href="/upload">
