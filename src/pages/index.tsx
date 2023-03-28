@@ -5,51 +5,15 @@ import Link from "next/link";
 import styles from "../styles/Home.module.css";
 
 import { api } from "~/utils/api";
-import { Main } from "next/document";
 import { LoadingSpinner } from "~/components/loadingSpinnter";
-
-const MainContent = (props: { userEmail: string }) => {
-  const { data: isAllowed, isLoading: isAuthorizedLoading } =
-    api.authorizedUser.getAuthorized.useQuery({
-      text: props.userEmail,
-    });
-
-  return (
-    <>
-      {isAuthorizedLoading && <LoadingSpinner />}
-      {!isAllowed && !isAuthorizedLoading && (
-        <h1 className={styles.title}>You are not authorized</h1>
-      )}
-      {isAllowed && (
-        <>
-          <SignOutButton />
-          <h1 className={styles.title}>Wordle Tracker</h1>
-          <div className={styles.grid}>
-            <Link href="/upload">
-              <a className={styles.card}>
-                <h2>Upload Scores &rarr;</h2>
-                <p>Upload your score to the tracker</p>
-              </a>
-            </Link>
-            <Link href="/userscore/1">
-              <a className={styles.card}>
-                <h2>View Scores &rarr;</h2>
-                <p>View a chart of your uploaded scores</p>
-              </a>
-            </Link>
-            <a href="https://nextjs.org/learn" className={styles.card}>
-              <h2>Administration &rarr;</h2>
-              <p>Access administration features of the application</p>
-            </a>
-          </div>
-        </>
-      )}
-    </>
-  );
-};
 
 const Home: NextPage = () => {
   const user = useUser();
+  const userEmailAddress = user.user?.primaryEmailAddress?.toString();
+  const { data: isAllowed, isLoading } =
+    api.authorizedUser.getAuthorized.useQuery({
+      text: userEmailAddress!,
+    });
   return (
     <div className={styles.container}>
       <Head>
@@ -59,9 +23,31 @@ const Home: NextPage = () => {
       </Head>
 
       <main className={styles.main}>
-        {!user.isSignedIn && <SignInButton />}
-        {user.isSignedIn && user.user.primaryEmailAddress && (
-          <MainContent userEmail={user.user.primaryEmailAddress.toString()} />
+        {isLoading && <LoadingSpinner />}
+        {!isLoading && !isAllowed && <h1>You are not authorized</h1>}
+        {isAllowed && (
+          <>
+            <SignOutButton />
+            <h1 className={styles.title}>Wordle Tracker</h1>
+            <div className={styles.grid}>
+              <Link href="/upload">
+                <a className={styles.card}>
+                  <h2>Upload Scores &rarr;</h2>
+                  <p>Upload your score to the tracker</p>
+                </a>
+              </Link>
+              <Link href="/userscore/1">
+                <a className={styles.card}>
+                  <h2>View Scores &rarr;</h2>
+                  <p>View a chart of your uploaded scores</p>
+                </a>
+              </Link>
+              <a href="https://nextjs.org/learn" className={styles.card}>
+                <h2>Administration &rarr;</h2>
+                <p>Access administration features of the application</p>
+              </a>
+            </div>
+          </>
         )}
       </main>
       <footer className={styles.footer}>
