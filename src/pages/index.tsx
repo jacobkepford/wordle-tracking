@@ -6,19 +6,21 @@ import styles from "../styles/Home.module.css";
 
 import { api } from "~/utils/api";
 import { Main } from "next/document";
+import { LoadingSpinner } from "~/components/loadingSpinnter";
 
 const MainContent = (props: { userEmail: string }) => {
-  const isAllowed = api.authorizedUser.getAuthorized.useQuery({
-    text: props.userEmail,
-  });
-  console.log(isAllowed.data);
+  const { data: isAllowed, isLoading: isAuthorizedLoading } =
+    api.authorizedUser.getAuthorized.useQuery({
+      text: props.userEmail,
+    });
 
   return (
     <>
-      {!isAllowed.data && (
+      {isAuthorizedLoading && <LoadingSpinner />}
+      {!isAllowed && !isAuthorizedLoading && (
         <h1 className={styles.title}>You are not authorized</h1>
       )}
-      {isAllowed.data && (
+      {isAllowed && (
         <>
           <SignOutButton />
           <h1 className={styles.title}>Wordle Tracker</h1>
