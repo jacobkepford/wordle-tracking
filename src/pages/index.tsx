@@ -10,7 +10,7 @@ import { LoadingSpinner } from "~/components/loadingSpinnter";
 const Home: NextPage = () => {
   const user = useUser();
   const userEmailAddress = user.user?.primaryEmailAddress?.toString();
-  const { data: isAllowed, isLoading } =
+  const { data: isAuthorized, isLoading } =
     api.authorizedUser.getAuthorized.useQuery({
       text: userEmailAddress!,
     });
@@ -24,8 +24,8 @@ const Home: NextPage = () => {
 
       <main className={styles.main}>
         {isLoading && <LoadingSpinner />}
-        {!isLoading && !isAllowed && <h1>You are not authorized</h1>}
-        {isAllowed && (
+        {!isLoading && !isAuthorized && <h1>You are not authorized</h1>}
+        {isAuthorized && (
           <>
             <SignOutButton />
             <h1 className={styles.title}>Wordle Tracker</h1>
