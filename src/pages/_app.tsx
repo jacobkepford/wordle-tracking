@@ -9,11 +9,13 @@ import {
   SignedIn,
   SignedOut,
 } from "@clerk/nextjs";
+import { Header } from "~/components/header";
 
 const MyApp: AppType = ({ Component, pageProps }) => {
   return (
     <ClerkProvider {...pageProps}>
       <SignedIn>
+        <Header />
         <Component {...pageProps} />
       </SignedIn>
       <SignedOut>

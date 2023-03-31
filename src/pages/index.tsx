@@ -1,4 +1,4 @@
-import { SignInButton, SignOutButton, useUser } from "@clerk/nextjs";
+import { useUser } from "@clerk/nextjs";
 import { type NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
@@ -27,7 +27,6 @@ const Home: NextPage = () => {
         {!isLoading && !isAuthorized && <h1>You are not authorized</h1>}
         {isAuthorized && (
           <>
-            <SignOutButton />
             <h1 className={styles.title}>Wordle Tracker</h1>
             <div className={styles.grid}>
               <Link href="/upload">
