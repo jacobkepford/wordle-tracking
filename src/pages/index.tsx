@@ -27,7 +27,6 @@ const Home: NextPage = () => {
         {!isLoading && !isAuthorized && <h1>You are not authorized</h1>}
         {isAuthorized && (
           <>
-            <h1 className={styles.title}>Wordle Tracker</h1>
             <div className={styles.grid}>
               <Link href="/upload">
                 <a className={styles.card}>
