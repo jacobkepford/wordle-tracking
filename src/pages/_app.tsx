@@ -1,7 +1,5 @@
 import { type AppType } from "next/app";
-
 import { api } from "~/utils/api";
-
 import "~/styles/globals.css";
 import {
   ClerkProvider,
@@ -9,11 +7,17 @@ import {
   SignedIn,
   SignedOut,
 } from "@clerk/nextjs";
+import { dark } from "@clerk/themes";
 import { Header } from "~/components/header";
 
 const MyApp: AppType = ({ Component, pageProps }) => {
   return (
-    <ClerkProvider {...pageProps}>
+    <ClerkProvider
+      appearance={{
+        baseTheme: dark,
+      }}
+      {...pageProps}
+    >
       <SignedIn>
         <Header />
         <Component {...pageProps} />
