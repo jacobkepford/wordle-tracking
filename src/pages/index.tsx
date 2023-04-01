@@ -28,17 +28,13 @@ const Home: NextPage = () => {
         {isAuthorized && (
           <>
             <div className={styles.grid}>
-              <Link href="/upload">
-                <a className={styles.card}>
-                  <h2>Upload Scores &rarr;</h2>
-                  <p>Upload your score to the tracker</p>
-                </a>
+              <Link href="/upload" className={styles.card}>
+                <h2>Upload Scores &rarr;</h2>
+                <p>Upload your score to the tracker</p>
               </Link>
-              <Link href="/userscore/1">
-                <a className={styles.card}>
-                  <h2>View Scores &rarr;</h2>
-                  <p>View a chart of your uploaded scores</p>
-                </a>
+              <Link href="/userscore/1" className={styles.card}>
+                <h2>View Scores &rarr;</h2>
+                <p>View a chart of your uploaded scores</p>
               </Link>
               <a href="https://nextjs.org/learn" className={styles.card}>
                 <h2>Administration &rarr;</h2>
