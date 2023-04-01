@@ -19,6 +19,11 @@ a {
   box-sizing: border-box;
 }
 
+nav .active{
+  border-bottom: 2px solid;
+  font-weight: bold;
+}
+
 @media (prefers-color-scheme: dark) {
   html {
     color-scheme: dark !important;
