@@ -84,7 +84,7 @@ const Upload: NextPage = () => {
     ClearValidation();
   };
 
-  const HandleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  const HandleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     const formData = GatherFormData();
