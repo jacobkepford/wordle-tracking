@@ -1,8 +1,11 @@
+import { useUser } from "@clerk/nextjs";
 import { NextPage } from "next";
 import { useState } from "react";
 import DatePicker from "react-datepicker";
+import { api } from "~/utils/api";
 
 import "react-datepicker/dist/react-datepicker.css";
+import { LoadingSpinner } from "~/components/loadingSpinnter";
 
 type Error = {
   scoreCountError: string;
@@ -10,6 +13,13 @@ type Error = {
 };
 
 const Upload: NextPage = () => {
+  const user = useUser();
+  const userEmailAddress = user.user?.primaryEmailAddress?.toString();
+  const { data: isAuthorized, isLoading } =
+    api.authorizedUser.getAuthorized.useQuery({
+      text: userEmailAddress!,
+    });
+
   const [scoreCount, setScoreCount] = useState(0);
   const [scoreDate, setScoreDate] = useState(new Date());
   const [errors, setErrors] = useState<Error>({
@@ -92,47 +102,53 @@ const Upload: NextPage = () => {
   };
 
   return (
-    <div className="ml-4 mt-4">
-      {/* <h1 className="text-2xl">Upload Score</h1> */}
-      <span>{successMessage}</span>
-      <form onSubmit={HandleSubmit} className="text-light">
-        <div className="mb-3 w-1/4">
-          <label htmlFor="scoreDate">
-            What date are you logging this score for?
-          </label>
-          <DatePicker
-            id="scoreDate"
-            selected={scoreDate}
-            onChange={(date: Date) => setScoreDate(date)}
-          />
-          <span style={{ color: "red" }}>{errors.scoreDateError}</span>
+    <>
+      {isLoading && <LoadingSpinner />}
+      {!isLoading && !isAuthorized && <h1>You are not authorized</h1>}
+      {isAuthorized && (
+        <div className="ml-4 mt-4">
+          {/* <h1 className="text-2xl">Upload Score</h1> */}
+          <span>{successMessage}</span>
+          <form onSubmit={HandleSubmit} className="text-light">
+            <div className="mb-3 w-1/4">
+              <label htmlFor="scoreDate">
+                What date are you logging this score for?
+              </label>
+              <DatePicker
+                id="scoreDate"
+                selected={scoreDate}
+                onChange={(date: Date) => setScoreDate(date)}
+              />
+              <span style={{ color: "red" }}>{errors.scoreDateError}</span>
+            </div>
+            <div className="mb-3 flex w-1/4 flex-col">
+              <label htmlFor="scoreNumber">What was your score?</label>
+              <input
+                type="number"
+                className="form-control"
+                id="scoreNumber"
+                onChange={(event) => setScoreCount(event.target.valueAsNumber)}
+                value={scoreCount}
+              />
+              <span style={{ color: "red" }}>{errors.scoreCountError}</span>
+            </div>
+            <button
+              className="bg-gray py2 rounded px-4 font-bold text-white"
+              onClick={ClearForm}
+              type="button"
+            >
+              Clear
+            </button>
+            <button
+              type="submit"
+              className="rounded bg-slate-900 py-2 px-4 font-bold text-white"
+            >
+              Upload
+            </button>
+          </form>
         </div>
-        <div className="mb-3 flex w-1/4 flex-col">
-          <label htmlFor="scoreNumber">What was your score?</label>
-          <input
-            type="number"
-            className="form-control"
-            id="scoreNumber"
-            onChange={(event) => setScoreCount(event.target.valueAsNumber)}
-            value={scoreCount}
-          />
-          <span style={{ color: "red" }}>{errors.scoreCountError}</span>
-        </div>
-        <button
-          className="bg-gray py2 rounded px-4 font-bold text-white"
-          onClick={ClearForm}
-          type="button"
-        >
-          Clear
-        </button>
-        <button
-          type="submit"
-          className="rounded bg-slate-900 py-2 px-4 font-bold text-white"
-        >
-          Upload
-        </button>
-      </form>
-    </div>
+      )}
+    </>
   );
 };
 
