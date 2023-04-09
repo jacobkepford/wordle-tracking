@@ -12,6 +12,11 @@ type Error = {
   scoreDateError: string;
 };
 
+type PossibleScore = {
+  score: number;
+  isActive: boolean;
+};
+
 const Upload: NextPage = () => {
   const user = useUser();
   const userEmailAddress = user.user?.primaryEmailAddress?.toString();
@@ -27,6 +32,14 @@ const Upload: NextPage = () => {
     scoreDateError: "",
   });
   const [successMessage, setsuccessMessage] = useState("");
+  const [possibleScores, setPossibleScores] = useState<PossibleScore[]>([
+    { score: 1, isActive: false },
+    { score: 2, isActive: false },
+    { score: 3, isActive: false },
+    { score: 4, isActive: false },
+    { score: 5, isActive: false },
+    { score: 6, isActive: false },
+  ]);
 
   const GatherFormData = () => {
     const formData = {
@@ -101,6 +114,16 @@ const Upload: NextPage = () => {
     ClearForm();
   };
 
+  const HandleScoreClick = (score: PossibleScore) => {
+    const updateScore = possibleScores.map((scoreValue) =>
+      scoreValue.score == score.score
+        ? { ...scoreValue, isActive: true }
+        : { ...scoreValue, isActive: false }
+    );
+
+    setPossibleScores(updateScore);
+  };
+
   return (
     <>
       {isLoading && <LoadingSpinner />}
@@ -121,8 +144,8 @@ const Upload: NextPage = () => {
               />
               <span style={{ color: "red" }}>{errors.scoreDateError}</span>
             </div>
-            <div className="mb-3 flex w-1/4 flex-col">
-              <label htmlFor="scoreNumber">What was your score?</label>
+            {/* <div className="mb-3 flex w-1/4 flex-col">
+              
               <input
                 type="number"
                 className="form-control"
@@ -131,20 +154,37 @@ const Upload: NextPage = () => {
                 value={scoreCount}
               />
               <span style={{ color: "red" }}>{errors.scoreCountError}</span>
+            </div> */}
+            <h1>What was your score?</h1>
+            <div className="flex  flex-row gap-2">
+              {possibleScores.map((score) => (
+                <button
+                  key={score.score}
+                  type="button"
+                  className={`h-12 w-12 border-2 border-white p-2 text-center hover:bg-slate-900 ${
+                    score.isActive ? "bg-slate-900" : ""
+                  }`}
+                  onClick={() => HandleScoreClick(score)}
+                >
+                  {score.score}
+                </button>
+              ))}
             </div>
-            <button
-              className="bg-gray py2 rounded px-4 font-bold text-white"
-              onClick={ClearForm}
-              type="button"
-            >
-              Clear
-            </button>
-            <button
-              type="submit"
-              className="rounded bg-slate-900 py-2 px-4 font-bold text-white"
-            >
-              Upload
-            </button>
+            <div className="mt-4">
+              <button
+                className="bg-gray py2 rounded px-4 font-bold text-white"
+                onClick={ClearForm}
+                type="button"
+              >
+                Clear
+              </button>
+              <button
+                type="submit"
+                className="rounded bg-slate-900 py-2 px-4 font-bold text-white"
+              >
+                Upload
+              </button>
+            </div>
           </form>
         </div>
       )}
