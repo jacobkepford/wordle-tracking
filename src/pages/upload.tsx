@@ -25,7 +25,6 @@ const Upload: NextPage = () => {
       text: userEmailAddress!,
     });
 
-  const [scoreCount, setScoreCount] = useState(0);
   const [scoreDate, setScoreDate] = useState(new Date());
   const [errors, setErrors] = useState<Error>({
     scoreCountError: "",
@@ -42,9 +41,10 @@ const Upload: NextPage = () => {
   ]);
 
   const GatherFormData = () => {
+    const activeScore = GetActiveScore();
     const formData = {
       scoreDate: new Date(scoreDate),
-      scoreCount: scoreCount,
+      scoreCount: activeScore,
     };
 
     return formData;
@@ -64,11 +64,12 @@ const Upload: NextPage = () => {
       setErrors((errors) => ({ ...errors, scoreCountError: "Required" }));
     }
 
-    if (formData.scoreCount < 1 || formData.scoreCount > 6) {
+    //Default value of scoreCount is 0
+    if (formData.scoreCount < 1) {
       formIsValid = false;
       setErrors((errors) => ({
         ...errors,
-        scoreCountError: "Invalid. Score must be between 1 and 6",
+        scoreCountError: "Required",
       }));
     }
 
@@ -92,9 +93,9 @@ const Upload: NextPage = () => {
   };
 
   const ClearForm = () => {
-    setScoreCount(0);
     setScoreDate(new Date());
     ClearValidation();
+    ClearActiveScore();
   };
 
   const HandleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -124,6 +125,26 @@ const Upload: NextPage = () => {
     setPossibleScores(updateScore);
   };
 
+  const ClearActiveScore = () => {
+    const clearedScores = possibleScores.map((score) => ({
+      ...score,
+      isActive: false,
+    }));
+
+    setPossibleScores(clearedScores);
+  };
+
+  const GetActiveScore = () => {
+    let activeScore = 0;
+    possibleScores.forEach((score) => {
+      if (score.isActive) {
+        activeScore = score.score;
+      }
+    });
+
+    return activeScore;
+  };
+
   return (
     <>
       {isLoading && <LoadingSpinner />}
@@ -144,17 +165,6 @@ const Upload: NextPage = () => {
               />
               <span style={{ color: "red" }}>{errors.scoreDateError}</span>
             </div>
-            {/* <div className="mb-3 flex w-1/4 flex-col">
-              
-              <input
-                type="number"
-                className="form-control"
-                id="scoreNumber"
-                onChange={(event) => setScoreCount(event.target.valueAsNumber)}
-                value={scoreCount}
-              />
-              <span style={{ color: "red" }}>{errors.scoreCountError}</span>
-            </div> */}
             <h1>What was your score?</h1>
             <div className="flex  flex-row gap-2">
               {possibleScores.map((score) => (
@@ -170,6 +180,7 @@ const Upload: NextPage = () => {
                 </button>
               ))}
             </div>
+            <span style={{ color: "red" }}>{errors.scoreCountError}</span>
             <div className="mt-4">
               <button
                 className="bg-gray py2 rounded px-4 font-bold text-white"
