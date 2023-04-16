@@ -9,6 +9,7 @@ import {
 } from "@clerk/nextjs";
 import { dark } from "@clerk/themes";
 import { Header } from "~/components/header";
+import AuthorizationGuard from "~/components/authorizationGuard";
 
 const MyApp: AppType = ({ Component, pageProps }) => {
   return (
@@ -20,7 +21,9 @@ const MyApp: AppType = ({ Component, pageProps }) => {
     >
       <SignedIn>
         <Header />
-        <Component {...pageProps} />
+        <AuthorizationGuard>
+          <Component {...pageProps} />
+        </AuthorizationGuard>
       </SignedIn>
       <SignedOut>
         <RedirectToSignIn />

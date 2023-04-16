@@ -5,7 +5,7 @@ import DatePicker from "react-datepicker";
 import { api } from "~/utils/api";
 
 import "react-datepicker/dist/react-datepicker.css";
-import { LoadingSpinner } from "~/components/loadingSpinnter";
+import { LoadingSpinner } from "~/components/loadingSpinner";
 
 type Error = {
   scoreCountError: string;
@@ -18,13 +18,6 @@ type PossibleScore = {
 };
 
 const Upload: NextPage = () => {
-  const user = useUser();
-  const userEmailAddress = user.user?.primaryEmailAddress?.toString();
-  const { data: isAuthorized, isLoading } =
-    api.authorizedUser.getAuthorized.useQuery({
-      text: userEmailAddress!,
-    });
-
   const [scoreDate, setScoreDate] = useState(new Date());
   const [errors, setErrors] = useState<Error>({
     scoreCountError: "",
@@ -147,58 +140,54 @@ const Upload: NextPage = () => {
 
   return (
     <>
-      {isLoading && <LoadingSpinner />}
-      {!isLoading && !isAuthorized && <h1>You are not authorized</h1>}
-      {isAuthorized && (
-        <div className="ml-4 mt-4">
-          {/* <h1 className="text-2xl">Upload Score</h1> */}
-          <span>{successMessage}</span>
-          <form onSubmit={HandleSubmit} className="text-light">
-            <div className="mb-3 w-1/4">
-              <label htmlFor="scoreDate">
-                What date are you logging this score for?
-              </label>
-              <DatePicker
-                id="scoreDate"
-                selected={scoreDate}
-                onChange={(date: Date) => setScoreDate(date)}
-              />
-              <span style={{ color: "red" }}>{errors.scoreDateError}</span>
-            </div>
-            <h1>What was your score?</h1>
-            <div className="flex  flex-row gap-2">
-              {possibleScores.map((score) => (
-                <button
-                  key={score.score}
-                  type="button"
-                  className={`h-12 w-12 border-2 border-white p-2 text-center hover:bg-slate-900 ${
-                    score.isActive ? "bg-slate-900" : ""
-                  }`}
-                  onClick={() => HandleScoreClick(score)}
-                >
-                  {score.score}
-                </button>
-              ))}
-            </div>
-            <span style={{ color: "red" }}>{errors.scoreCountError}</span>
-            <div className="mt-4">
+      <div className="ml-4 mt-4">
+        {/* <h1 className="text-2xl">Upload Score</h1> */}
+        <span>{successMessage}</span>
+        <form onSubmit={HandleSubmit} className="text-light">
+          <div className="mb-3 w-1/4">
+            <label htmlFor="scoreDate">
+              What date are you logging this score for?
+            </label>
+            <DatePicker
+              id="scoreDate"
+              selected={scoreDate}
+              onChange={(date: Date) => setScoreDate(date)}
+            />
+            <span style={{ color: "red" }}>{errors.scoreDateError}</span>
+          </div>
+          <h1>What was your score?</h1>
+          <div className="flex  flex-row gap-2">
+            {possibleScores.map((score) => (
               <button
-                className="bg-gray py2 rounded px-4 font-bold text-white"
-                onClick={ClearForm}
+                key={score.score}
                 type="button"
+                className={`h-12 w-12 border-2 border-white p-2 text-center hover:bg-slate-900 ${
+                  score.isActive ? "bg-slate-900" : ""
+                }`}
+                onClick={() => HandleScoreClick(score)}
               >
-                Clear
+                {score.score}
               </button>
-              <button
-                type="submit"
-                className="rounded bg-slate-900 py-2 px-4 font-bold text-white"
-              >
-                Upload
-              </button>
-            </div>
-          </form>
-        </div>
-      )}
+            ))}
+          </div>
+          <span style={{ color: "red" }}>{errors.scoreCountError}</span>
+          <div className="mt-4">
+            <button
+              className="bg-gray py2 rounded px-4 font-bold text-white"
+              onClick={ClearForm}
+              type="button"
+            >
+              Clear
+            </button>
+            <button
+              type="submit"
+              className="rounded bg-slate-900 py-2 px-4 font-bold text-white"
+            >
+              Upload
+            </button>
+          </div>
+        </form>
+      </div>
     </>
   );
 };

@@ -5,15 +5,9 @@ import Link from "next/link";
 import styles from "../styles/Home.module.css";
 
 import { api } from "~/utils/api";
-import { LoadingSpinner } from "~/components/loadingSpinnter";
+import { LoadingSpinner } from "~/components/loadingSpinner";
 
 const Home: NextPage = () => {
-  const user = useUser();
-  const userEmailAddress = user.user?.primaryEmailAddress?.toString();
-  const { data: isAuthorized, isLoading } =
-    api.authorizedUser.getAuthorized.useQuery({
-      text: userEmailAddress!,
-    });
   return (
     <div className={styles.container}>
       <Head>
@@ -23,26 +17,22 @@ const Home: NextPage = () => {
       </Head>
 
       <main className={styles.main}>
-        {isLoading && <LoadingSpinner />}
-        {!isLoading && !isAuthorized && <h1>You are not authorized</h1>}
-        {isAuthorized && (
-          <>
-            <div className={styles.grid}>
-              <Link href="/upload" className={styles.card}>
-                <h2>Upload Scores &rarr;</h2>
-                <p>Upload your score to the tracker</p>
-              </Link>
-              <Link href="/userscore/1" className={styles.card}>
-                <h2>View Scores &rarr;</h2>
-                <p>View a chart of your uploaded scores</p>
-              </Link>
-              <a href="https://nextjs.org/learn" className={styles.card}>
-                <h2>Administration &rarr;</h2>
-                <p>Access administration features of the application</p>
-              </a>
-            </div>
-          </>
-        )}
+        <>
+          <div className={styles.grid}>
+            <Link href="/upload" className={styles.card}>
+              <h2>Upload Scores &rarr;</h2>
+              <p>Upload your score to the tracker</p>
+            </Link>
+            <Link href="/userscore/1" className={styles.card}>
+              <h2>View Scores &rarr;</h2>
+              <p>View a chart of your uploaded scores</p>
+            </Link>
+            <a href="https://nextjs.org/learn" className={styles.card}>
+              <h2>Administration &rarr;</h2>
+              <p>Access administration features of the application</p>
+            </a>
+          </div>
+        </>
       </main>
       <footer className={styles.footer}>
         <p>Powered by Wileskep</p>
