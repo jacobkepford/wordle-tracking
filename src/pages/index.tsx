@@ -1,11 +1,7 @@
-import { useUser } from "@clerk/nextjs";
 import { type NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
 import styles from "../styles/Home.module.css";
-
-import { api } from "~/utils/api";
-import { LoadingSpinner } from "~/components/loadingSpinner";
 
 const Home: NextPage = () => {
   return (
