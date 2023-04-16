@@ -14,10 +14,8 @@ const AuthorizationGuard = ({ children }: { children: JSX.Element }) => {
     });
 
   useEffect(() => {
-    if (!isLoading && router.pathname != "/notauthorized") {
-      if (!isAuthorized) {
-        void router.push("/notauthorized");
-      }
+    if (!isLoading && router.pathname != "/notauthorized" && !isAuthorized) {
+      void router.push("/notauthorized");
     }
   }, [user, isAuthorized, isLoading, router]);
 
