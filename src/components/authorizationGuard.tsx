@@ -1,6 +1,6 @@
 import { useUser } from "@clerk/nextjs";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { api } from "~/utils/api";
 import { LoadingSpinner } from "./loadingSpinner";
 
@@ -16,10 +16,10 @@ const AuthorizationGuard = ({ children }: { children: JSX.Element }) => {
   useEffect(() => {
     if (!isLoading && router.pathname != "/notauthorized") {
       if (!isAuthorized) {
-        router.push("/notauthorized");
+        void router.push("/notauthorized");
       }
     }
-  }, [user]);
+  }, [user, isAuthorized, isLoading, router]);
 
   if (isLoading) {
     return <LoadingSpinner />;

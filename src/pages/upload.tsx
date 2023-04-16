@@ -1,11 +1,8 @@
-import { useUser } from "@clerk/nextjs";
 import { NextPage } from "next";
 import { useState } from "react";
 import DatePicker from "react-datepicker";
-import { api } from "~/utils/api";
 
 import "react-datepicker/dist/react-datepicker.css";
-import { LoadingSpinner } from "~/components/loadingSpinner";
 
 type Error = {
   scoreCountError: string;
