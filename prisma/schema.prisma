@@ -22,14 +22,8 @@ model Score {
 }
 
 model User {
-    user_id         Int      @id @default(autoincrement())
-    user_first_name String
-    user_last_name  String
-    create_date     DateTime @default(now())
-}
-
-model AuthorizedUser {
-    authorized_user_id       Int      @id @default(autoincrement())
-    authroized_email_address String
-    create_date              DateTime @default(now())
+    user_id            String   @id
+    user_email_address String   @unique
+    user_is_authorized Boolean  @default(false)
+    create_date        DateTime @default(now())
 }
