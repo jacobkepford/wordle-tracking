@@ -15,15 +15,16 @@ const PreAuthorize: NextPage = () => {
     message: "",
   });
   const addUser = api.preAuthorizedAccount.addPreAuthUser.useMutation({
-    onSuccess: () => {
+    onMutate: () => {
       ClearValidation();
+    },
+    onSuccess: () => {
       ClearForm();
 
       setsuccessMessage({
         message: "Sucessfully pre authorized email",
         color: "green",
       });
-      ShowSuccessMessage();
     },
     onError: (e) => {
       if (
@@ -35,7 +36,9 @@ const PreAuthorize: NextPage = () => {
       }
 
       setsuccessMessage({ message: e.message, color: "red" });
-      ShowSuccessMessage();
+    },
+    onSettled: () => {
+      FlashSuccessMessage();
     },
   });
 
@@ -43,7 +46,7 @@ const PreAuthorize: NextPage = () => {
     setError("");
   };
 
-  const ShowSuccessMessage = () => {
+  const FlashSuccessMessage = () => {
     //Flash success message and then hide after 5 seconds
     setTimeout(() => {
       ClearSuccessMessage();
@@ -59,20 +62,12 @@ const PreAuthorize: NextPage = () => {
     ClearValidation();
   };
 
-  const HandleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
-    ClearValidation();
-
-    addUser.mutate({ email: email });
-  };
-
   return (
     <>
       <span style={{ color: successMessage?.color }}>
         {successMessage?.message}
       </span>
-      <form onSubmit={HandleSubmit}>
+      <form>
         <input
           type="text"
           onChange={(e) => setEmail(e.target.value)}
@@ -88,8 +83,9 @@ const PreAuthorize: NextPage = () => {
             Clear
           </button>
           <button
-            type="submit"
+            type="button"
             className="rounded bg-slate-900 py-2 px-4 font-bold text-white"
+            onClick={() => addUser.mutate({ email: email })}
           >
             Upload
           </button>
