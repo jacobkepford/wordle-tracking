@@ -22,4 +22,16 @@ export const preAuthorizedAccountRouter = createTRPCRouter({
               }
         }
     }),
+    getAll: privateProcedure.query(({ ctx }) => {
+        return ctx.prisma.preAuthorizedAccount.findMany();
+      }),
+    deletePreAuthUser: privateProcedure
+    .input(z.object({ userID: z.number() }))
+    .mutation(async ({ input, ctx }) => {
+        await ctx.prisma.preAuthorizedAccount.delete({
+            where: {
+                pre_authorized_id: input.userID
+            }
+        })
+    }),
 });
