@@ -10,6 +10,7 @@ import {
 import { dark } from "@clerk/themes";
 import { Header } from "~/components/header";
 import AuthorizationGuard from "~/components/authorizationGuard";
+import { Footer } from "~/components/footer";
 
 const MyApp: AppType = ({ Component, pageProps }) => {
   return (
@@ -24,6 +25,7 @@ const MyApp: AppType = ({ Component, pageProps }) => {
         <AuthorizationGuard>
           <Component {...pageProps} />
         </AuthorizationGuard>
+        <Footer />
       </SignedIn>
       <SignedOut>
         <RedirectToSignIn />

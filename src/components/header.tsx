@@ -37,6 +37,14 @@ export const Header = () => {
         >
           Your Scores
         </Link>
+        <Link
+          href="/admin/landing"
+          className={`text-1xl rounded px-4 py-4 hover:bg-slate-800 ${
+            routerPath == "/admin/landing" ? "active" : ""
+          }`}
+        >
+          Administration
+        </Link>
       </div>
       <div className="ml-auto mr-4">
         <UserButton />
