@@ -82,16 +82,16 @@ const PreAuthorize: NextPage = () => {
 
   return (
     <div className="m-6">
-      <span style={{ color: successMessage?.color }}>
-        {successMessage?.message}
-      </span>
-      <form className="flex flex-col items-center justify-center">
+      <form className="mb-4 flex flex-col items-center justify-center">
+        <span style={{ color: successMessage?.color }} className="mb-4">
+          {successMessage?.message}
+        </span>
         <div className="">
           <label htmlFor="textEmail">Enter an email address</label>
           <input
             type="text"
             id="textEmail"
-            className="mx-4"
+            className="mx-4 w-52"
             onChange={(e) => setEmail(e.target.value)}
             value={email}
           ></input>

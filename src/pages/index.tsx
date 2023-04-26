@@ -23,10 +23,10 @@ const Home: NextPage = () => {
               <h2>View Scores &rarr;</h2>
               <p>View a chart of your uploaded scores</p>
             </Link>
-            <a href="https://nextjs.org/learn" className={styles.card}>
+            <Link href="/admin/landing" className={styles.card}>
               <h2>Administration &rarr;</h2>
               <p>Access administration features of the application</p>
-            </a>
+            </Link>
           </div>
         </>
       </main>
