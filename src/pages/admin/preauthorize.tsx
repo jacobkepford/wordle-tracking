@@ -81,18 +81,23 @@ const PreAuthorize: NextPage = () => {
   };
 
   return (
-    <>
+    <div className="m-6">
       <span style={{ color: successMessage?.color }}>
         {successMessage?.message}
       </span>
-      <form>
-        <input
-          type="text"
-          onChange={(e) => setEmail(e.target.value)}
-          value={email}
-        ></input>
-        <span style={{ color: "red" }}>{emailError}</span>
-        <div className="mt-4">
+      <form className="flex flex-col items-center justify-center">
+        <div className="">
+          <label htmlFor="textEmail">Enter an email address</label>
+          <input
+            type="text"
+            id="textEmail"
+            className="mx-4"
+            onChange={(e) => setEmail(e.target.value)}
+            value={email}
+          ></input>
+          <span style={{ color: "red" }}>{emailError}</span>
+        </div>
+        <div className="mt-4 mr-4">
           <button
             className="bg-gray py2 rounded px-4 font-bold text-white"
             onClick={ClearForm}
@@ -110,8 +115,8 @@ const PreAuthorize: NextPage = () => {
         </div>
       </form>
       {preAuthUsers.data && (
-        <div className="relative mt-4 overflow-x-auto">
-          <table className="w-full text-left text-sm text-gray-500 dark:text-gray-400">
+        <div className="relative mt-4 flex overflow-x-auto">
+          <table className="w-full content-center text-left text-sm text-gray-500 dark:text-gray-400">
             <thead className="bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400">
               <tr>
                 <th scope="col" className="px-6 py-3">
@@ -152,7 +157,7 @@ const PreAuthorize: NextPage = () => {
           </table>
         </div>
       )}
-    </>
+    </div>
   );
 };
 
