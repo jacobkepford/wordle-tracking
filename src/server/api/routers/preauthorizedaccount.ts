@@ -23,6 +23,7 @@ export const preAuthorizedAccountRouter = createTRPCRouter({
               }
         }
     }),
+
     getAll: privateProcedure.query(({ ctx }) => {
         return ctx.prisma.preAuthorizedAccount.findMany();
       }),

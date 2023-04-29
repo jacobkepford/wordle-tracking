@@ -25,6 +25,8 @@ export const userRouter = createTRPCRouter({
         }
       );
     }),
+
+    
     getAuthorized: privateProcedure
     .query(async ({ ctx }) => {
       let isAuthorized = false;
