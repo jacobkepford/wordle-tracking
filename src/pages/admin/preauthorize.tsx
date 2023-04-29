@@ -142,9 +142,7 @@ const PreAuthorize: NextPage = () => {
           <table className="w-full content-center text-left text-sm text-gray-500 dark:text-gray-400">
             <thead className="bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400">
               <tr>
-                <th scope="col" className="px-6 py-3">
-                  Delete
-                </th>
+                <th scope="col" className="px-6 py-3"></th>
                 <th scope="col" className="px-6 py-3">
                   Email Address
                 </th>
@@ -163,6 +161,19 @@ const PreAuthorize: NextPage = () => {
                   className="border-b bg-white dark:border-gray-700 dark:bg-gray-800"
                 >
                   <td className="px-6 py-4">
+                    <button
+                      type="button"
+                      className="mr-4 rounded bg-slate-900 py-2 px-4 font-bold text-white"
+                      onClick={() =>
+                        setFormData({
+                          ...formData,
+                          email: user.pre_authorized_email,
+                          isAdmin: user.pre_authorized_as_admin,
+                        })
+                      }
+                    >
+                      Edit
+                    </button>
                     <button
                       type="button"
                       className="rounded bg-slate-900 py-2 px-4 font-bold text-white"

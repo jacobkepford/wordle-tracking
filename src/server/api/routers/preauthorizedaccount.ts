@@ -9,9 +9,15 @@ export const preAuthorizedAccountRouter = createTRPCRouter({
     .input(z.object({ email: z.string().email(), isAdmin: z.boolean() }))
     .mutation(async ({ input, ctx }) => {
         try{
-            await ctx.prisma.preAuthorizedAccount.create({
-                data: {
+            await ctx.prisma.preAuthorizedAccount.upsert({
+                where: {
+                    pre_authorized_email: input.email
+                },
+                create: {
                     pre_authorized_email: input.email,
+                    pre_authorized_as_admin: input.isAdmin
+                },
+                update: {
                     pre_authorized_as_admin: input.isAdmin
                 }
             })
