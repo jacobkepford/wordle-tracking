@@ -30,9 +30,7 @@ const Home: NextPage = () => {
           </div>
         </>
       </main>
-      <footer className={styles.footer}>
-        <p>Powered by Wileskep</p>
-      </footer>
+      
     </div>
   );
 };

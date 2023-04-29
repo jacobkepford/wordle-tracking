@@ -29,6 +29,10 @@ const AuthorizationGuard = ({ children }: { children: JSX.Element }) => {
     return <LoadingSpinner />;
   }
 
+  if (isAuthorized && router.pathname == "/notauthorized") {
+    void router.push("/");
+  }
+
   if (isAuthorized || (!isAuthorized && router.pathname == "/notauthorized")) {
     return <>{children}</>;
   }

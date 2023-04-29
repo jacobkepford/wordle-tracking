@@ -5,12 +5,20 @@ export const userRouter = createTRPCRouter({
   createUser: privateProcedure
     .input(z.object({ email: z.string().email() }))
     .mutation(async ({ input, ctx }) => {
+      const isPreAuthorized = await ctx.prisma.preAuthorizedAccount.findFirst(
+        {where: {
+          pre_authorized_email: input.email
+        }}
+      )
+      const preAuthStatus = isPreAuthorized ? true : false;
+
       await ctx.prisma.user.upsert(
         { where: {user_id: ctx.userId},
           create:
           {
             user_id: ctx.userId,
             user_email_address: input.email,
+            user_is_authorized: preAuthStatus
           },
           update: {}
         }
