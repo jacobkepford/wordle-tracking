@@ -126,7 +126,12 @@ const PreAuthorize: NextPage = () => {
           <button
             type="button"
             className="rounded bg-slate-900 py-2 px-4 font-bold text-white"
-            onClick={() => addUser.mutate({ email: formData.email })}
+            onClick={() =>
+              addUser.mutate({
+                email: formData.email,
+                isAdmin: formData.isAdmin,
+              })
+            }
           >
             Add
           </button>
@@ -142,6 +147,9 @@ const PreAuthorize: NextPage = () => {
                 </th>
                 <th scope="col" className="px-6 py-3">
                   Email Address
+                </th>
+                <th scope="col" className="px-6 py-3">
+                  Is Admin
                 </th>
                 <th scope="col" className="px-6 py-3">
                   Create Date
@@ -166,6 +174,9 @@ const PreAuthorize: NextPage = () => {
                     </button>
                   </td>
                   <td className="px-6 py-4">{user.pre_authorized_email}</td>
+                  <td className="px-6 py-4">
+                    {user.pre_authorized_as_admin ? "Yes" : "No"}
+                  </td>
                   <td className="px-6 py-4">
                     {user.create_date.toLocaleDateString()}
                   </td>
