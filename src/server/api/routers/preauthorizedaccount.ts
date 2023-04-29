@@ -13,26 +13,18 @@ export const preAuthorizedAccountRouter = createTRPCRouter({
   addPreAuthUser: privateProcedure
     .input(z.object({ email: z.string().email(), isAdmin: z.boolean() }))
     .mutation(async ({ input, ctx }) => {
-        try{
-            await ctx.prisma.preAuthorizedAccount.upsert({
-                where: {
-                    pre_authorized_email: input.email
-                },
-                create: {
-                    pre_authorized_email: input.email,
-                    pre_authorized_as_admin: input.isAdmin
-                },
-                update: {
-                    pre_authorized_as_admin: input.isAdmin
-                }
-            })
-        } catch (e) {
-            if (e instanceof PrismaClientKnownRequestError) {
-                if (e.code === 'P2002') {
-                  throw new TRPCError({code: "INTERNAL_SERVER_ERROR", message: "Email already exists"})
-                }
-              }
-        }
+        await ctx.prisma.preAuthorizedAccount.upsert({
+            where: {
+                pre_authorized_email: input.email
+            },
+            create: {
+                pre_authorized_email: input.email,
+                pre_authorized_as_admin: input.isAdmin
+            },
+            update: {
+                pre_authorized_as_admin: input.isAdmin
+            }
+        })
     }),
 
     getAll: privateProcedure.query(async ({ ctx }) => {
