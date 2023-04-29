@@ -9,8 +9,16 @@ const PreAuthorize: NextPage = () => {
     color: string;
   };
 
-  const [email, setEmail] = useState("");
-  const [emailError, setError] = useState("");
+  type FormData = {
+    email: string;
+    isAdmin: boolean;
+  };
+
+  const [formData, setFormData] = useState<FormData>({
+    email: "",
+    isAdmin: false,
+  });
+  const [error, setError] = useState("");
   const [successMessage, setsuccessMessage] = useState<SuccessMessage>({
     color: "",
     message: "",
@@ -76,7 +84,7 @@ const PreAuthorize: NextPage = () => {
   };
 
   const ClearForm = () => {
-    setEmail("");
+    setFormData({ email: "", isAdmin: false });
     ClearValidation();
   };
 
@@ -86,17 +94,27 @@ const PreAuthorize: NextPage = () => {
         <span style={{ color: successMessage?.color }} className="mb-4">
           {successMessage?.message}
         </span>
-        <div className="">
-          <label htmlFor="textEmail">Enter an email address</label>
+        <label htmlFor="textEmail">Enter an email address</label>
+        <input
+          type="text"
+          id="textEmail"
+          className="mx-4 w-52"
+          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+          value={formData.email}
+        ></input>
+        <div className="d-flex mt-4 flex-row">
+          <label htmlFor="isAdmin">Add as admin?</label>
           <input
-            type="text"
-            id="textEmail"
-            className="mx-4 w-52"
-            onChange={(e) => setEmail(e.target.value)}
-            value={email}
+            type="checkbox"
+            className="ml-4 mt-2 h-4 w-4"
+            id="isAdmin"
+            checked={formData.isAdmin}
+            onChange={() =>
+              setFormData({ ...formData, isAdmin: !formData.isAdmin })
+            }
           ></input>
-          <span style={{ color: "red" }}>{emailError}</span>
         </div>
+        <span style={{ color: "red" }}>{error}</span>
         <div className="mt-4 mr-4">
           <button
             className="bg-gray py2 rounded px-4 font-bold text-white"
@@ -108,9 +126,9 @@ const PreAuthorize: NextPage = () => {
           <button
             type="button"
             className="rounded bg-slate-900 py-2 px-4 font-bold text-white"
-            onClick={() => addUser.mutate({ email: email })}
+            onClick={() => addUser.mutate({ email: formData.email })}
           >
-            Upload
+            Add
           </button>
         </div>
       </form>

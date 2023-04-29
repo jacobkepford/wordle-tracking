@@ -30,7 +30,8 @@ model User {
 }
 
 model PreAuthorizedAccount {
-    pre_authorized_id    Int      @id @default(autoincrement())
-    pre_authorized_email String   @unique
-    create_date          DateTime @default(now())
+    pre_authorized_id       Int      @id @default(autoincrement())
+    pre_authorized_email    String   @unique
+    pre_authorized_as_admin Boolean  @default(false)
+    create_date             DateTime @default(now())
 }
