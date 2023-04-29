@@ -37,7 +37,7 @@ const PreAuthorize: NextPage = () => {
         color: "green",
       });
 
-      ctx.preAuthorizedAccount.getAll.invalidate();
+      void ctx.preAuthorizedAccount.getAll.invalidate();
     },
     onError: (e) => {
       //If zod error, show error on field
@@ -64,7 +64,7 @@ const PreAuthorize: NextPage = () => {
       });
       FlashSuccessMessage();
 
-      ctx.preAuthorizedAccount.getAll.invalidate();
+      void ctx.preAuthorizedAccount.getAll.invalidate();
     },
   });
 
