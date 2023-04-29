@@ -1,8 +1,13 @@
+import { PreAuthorizedAccount } from "@prisma/client";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
 import { createTRPCRouter, privateProcedure } from "~/server/api/trpc";
+
+type PreAuthReturnUsers = PreAuthorizedAccount & {
+    isUserRegistered: boolean
+}
 
 export const preAuthorizedAccountRouter = createTRPCRouter({
   addPreAuthUser: privateProcedure
@@ -30,8 +35,20 @@ export const preAuthorizedAccountRouter = createTRPCRouter({
         }
     }),
 
-    getAll: privateProcedure.query(({ ctx }) => {
-        return ctx.prisma.preAuthorizedAccount.findMany();
+    getAll: privateProcedure.query(async ({ ctx }) => {
+        //Gets all preregistered users and checks to see if user has an account already in the system
+        const returnUsers: PreAuthReturnUsers[] = []
+        const users = await ctx.prisma.user.findMany({
+            select: {
+                user_email_address: true
+            }
+        })
+        const preAuthedUsers = await ctx.prisma.preAuthorizedAccount.findMany();
+        preAuthedUsers.forEach(preAuthUser => {
+            const isUserRegistered = users.some(user => user.user_email_address == preAuthUser.pre_authorized_email)
+            returnUsers.push({...preAuthUser, isUserRegistered: isUserRegistered})
+        });
+        return returnUsers;
       }),
 
     deletePreAuthUser: privateProcedure

@@ -150,6 +150,9 @@ const PreAuthorize: NextPage = () => {
                   Is Admin
                 </th>
                 <th scope="col" className="px-6 py-3">
+                  Account Created
+                </th>
+                <th scope="col" className="px-6 py-3">
                   Create Date
                 </th>
               </tr>
@@ -187,6 +190,9 @@ const PreAuthorize: NextPage = () => {
                   <td className="px-6 py-4">{user.pre_authorized_email}</td>
                   <td className="px-6 py-4">
                     {user.pre_authorized_as_admin ? "Yes" : "No"}
+                  </td>
+                  <td className="px-6 py-4">
+                    {user.isUserRegistered ? "Yes" : "No"}
                   </td>
                   <td className="px-6 py-4">
                     {user.create_date.toLocaleDateString()}
