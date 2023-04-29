@@ -25,6 +25,7 @@ model User {
     user_id            String   @id
     user_email_address String   @unique
     user_is_authorized Boolean  @default(false)
+    user_is_admin      Boolean  @default(false)
     create_date        DateTime @default(now())
 }
 
