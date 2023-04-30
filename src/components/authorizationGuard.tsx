@@ -12,8 +12,8 @@ const AuthorizationGuard = ({ children }: { children: JSX.Element }) => {
 
   const hasVerifiedUserID = localStorage.getItem("hasVerifiedUserID");
 
-  if (!hasVerifiedUserID) {
-    createUserID.mutate({ email: emailAddress! });
+  if (!hasVerifiedUserID && emailAddress) {
+    createUserID.mutate({ email: emailAddress });
     localStorage.setItem("hasVerifiedUserID", "true");
   }
 

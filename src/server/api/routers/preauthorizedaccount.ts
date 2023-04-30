@@ -1,6 +1,4 @@
-import { PreAuthorizedAccount } from "@prisma/client";
-import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
-import { TRPCError } from "@trpc/server";
+import type { PreAuthorizedAccount } from "@prisma/client";
 import { z } from "zod";
 
 import { createTRPCRouter, privateProcedure } from "~/server/api/trpc";

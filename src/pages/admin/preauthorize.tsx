@@ -1,5 +1,4 @@
-import { PreAuthorizedAccount } from "@prisma/client";
-import { NextPage } from "next";
+import type { NextPage } from "next";
 import { useState } from "react";
 import { api } from "~/utils/api";
 
