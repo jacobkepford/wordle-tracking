@@ -101,6 +101,7 @@ const PreAuthorize: NextPage = () => {
           onChange={(e) => setFormData({ ...formData, email: e.target.value })}
           value={formData.email}
         ></input>
+        <span style={{ color: "red" }}>{error}</span>
         <div className="d-flex mt-4 flex-row">
           <label htmlFor="isAdmin">Add as admin?</label>
           <input
@@ -113,7 +114,6 @@ const PreAuthorize: NextPage = () => {
             }
           ></input>
         </div>
-        <span style={{ color: "red" }}>{error}</span>
         <div className="mt-4 mr-4">
           <button
             className="bg-gray py2 rounded px-4 font-bold text-white"
