@@ -4,10 +4,13 @@ import { createTRPCRouter, privateProcedure, publicProcedure } from "~/server/ap
 
 export const scoreRouter = createTRPCRouter({
   addScore: privateProcedure
-    .input(z.object({ score_value: z.number(), score_date: z.date() }))
+    .input(z.object({ score_value: z.number().min(1).max(6), score_date: z.date() }))
     .mutation(async ({ input, ctx }) => {
+      //Convert to UTC to remove time, just need date
+      input.score_date.getTimezoneOffset();
+      input.score_date.setUTCHours(0, 0, 0, 0);
       await ctx.prisma.score.upsert(
-        { where: {score_user: ctx.userId, score_date: input.score_date},
+        { where: {score_user_score_date: {score_user: ctx.userId, score_date: input.score_date}},
           create:
           {
             score_value: input.score_value,
@@ -16,7 +19,7 @@ export const scoreRouter = createTRPCRouter({
           },
           update: 
           {
-            score_value: input.score_value
+            score_value: input.score_value,
           }
         }
       ); 

@@ -1,13 +1,9 @@
 import type { NextPage } from "next";
 import { useState } from "react";
+import { SuccessMessage } from "~/components/successMessage";
 import { api } from "~/utils/api";
 
 const PreAuthorize: NextPage = () => {
-  type SuccessMessage = {
-    message: string;
-    color: string;
-  };
-
   type FormData = {
     email: string;
     isAdmin: boolean;
@@ -17,13 +13,17 @@ const PreAuthorize: NextPage = () => {
     email: "",
     isAdmin: false,
   });
+
   const [error, setError] = useState("");
+
   const [successMessage, setsuccessMessage] = useState<SuccessMessage>({
     color: "",
     message: "",
   });
+
   const preAuthUsers = api.preAuthorizedAccount.getAll.useQuery();
   const ctx = api.useContext();
+
   const addUser = api.preAuthorizedAccount.addPreAuthUser.useMutation({
     onMutate: () => {
       ClearValidation();
@@ -90,9 +90,10 @@ const PreAuthorize: NextPage = () => {
   return (
     <div className="m-6">
       <form className="mb-4 flex flex-col items-center justify-center">
-        <span style={{ color: successMessage?.color }} className="mb-4">
-          {successMessage?.message}
-        </span>
+        <SuccessMessage
+          message={successMessage.message}
+          color={successMessage.color}
+        />
         <label htmlFor="textEmail">Enter an email address</label>
         <input
           type="text"

@@ -1,6 +1,7 @@
 import { createTRPCRouter } from "~/server/api/trpc";
 import { userRouter } from "./routers/user";
 import { preAuthorizedAccountRouter } from "./routers/preauthorizedaccount";
+import { scoreRouter } from "./routers/score";
 
 /**
  * This is the primary router for your server.
@@ -9,7 +10,8 @@ import { preAuthorizedAccountRouter } from "./routers/preauthorizedaccount";
  */
 export const appRouter = createTRPCRouter({
   user: userRouter,
-  preAuthorizedAccount: preAuthorizedAccountRouter
+  preAuthorizedAccount: preAuthorizedAccountRouter,
+  score: scoreRouter
 });
 
 // export type definition of API

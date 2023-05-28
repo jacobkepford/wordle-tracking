@@ -1,8 +1,9 @@
 import type { NextPage } from "next";
 import { useState } from "react";
 import DatePicker from "react-datepicker";
-
 import "react-datepicker/dist/react-datepicker.css";
+import { SuccessMessage } from "~/components/successMessage";
+import { api } from "~/utils/api";
 
 type Error = {
   scoreCountError: string;
@@ -14,13 +15,22 @@ type PossibleScore = {
   isActive: boolean;
 };
 
+type FormData = {
+  score_value: number;
+  score_date: Date;
+};
+
 const Upload: NextPage = () => {
-  const [scoreDate, setScoreDate] = useState(new Date());
   const [errors, setErrors] = useState<Error>({
     scoreCountError: "",
     scoreDateError: "",
   });
-  const [successMessage, setsuccessMessage] = useState("");
+
+  const [successMessage, setsuccessMessage] = useState<SuccessMessage>({
+    color: "",
+    message: "",
+  });
+
   const [possibleScores, setPossibleScores] = useState<PossibleScore[]>([
     { score: 1, isActive: false },
     { score: 2, isActive: false },
@@ -30,41 +40,37 @@ const Upload: NextPage = () => {
     { score: 6, isActive: false },
   ]);
 
-  const GatherFormData = () => {
-    const activeScore = GetActiveScore();
-    const formData = {
-      scoreDate: new Date(scoreDate),
-      scoreCount: activeScore,
-    };
+  const [formData, setFormData] = useState<FormData>({
+    score_value: 0,
+    score_date: new Date(),
+  });
 
-    return formData;
-  };
+  const addScore = api.score.addScore.useMutation({
+    onMutate: () => {
+      ClearValidation();
+    },
+    onSuccess: () => {
+      ClearForm();
 
-  const ValidateForm = (formData: { scoreDate: Date; scoreCount: number }) => {
-    let formIsValid = true;
+      setsuccessMessage({
+        message: "Sucessfully added score",
+        color: "green",
+      });
+    },
+    onError: (e) => {
+      //If zod error, show error on field
+      // if (e.data?.zodError?.fieldErrors) {
+      //   setErrors(e.message.toString);
+      //   return;
+      // }
 
-    //Empty date returns year value of 1969
-    if (formData.scoreDate.getFullYear() < 1970) {
-      formIsValid = false;
-      setErrors((errors) => ({ ...errors, scoreDateError: "Required" }));
-    }
-
-    if (!formData.scoreCount) {
-      formIsValid = false;
-      setErrors((errors) => ({ ...errors, scoreCountError: "Required" }));
-    }
-
-    //Default value of scoreCount is 0
-    if (formData.scoreCount < 1) {
-      formIsValid = false;
-      setErrors((errors) => ({
-        ...errors,
-        scoreCountError: "Required",
-      }));
-    }
-
-    return formIsValid;
-  };
+      //Otherwise, flash error up top
+      setsuccessMessage({ message: e.message, color: "red" });
+    },
+    onSettled: () => {
+      FlashSuccessMessage();
+    },
+  });
 
   const ClearValidation = () => {
     setErrors((errors) => ({
@@ -74,35 +80,10 @@ const Upload: NextPage = () => {
     }));
   };
 
-  const ShowSuccessMessage = (message: string) => {
-    //Flash success message and then hide after 5 seconds
-    setsuccessMessage(message);
-    setTimeout(() => {
-      setsuccessMessage("");
-    }, 5000);
-  };
-
   const ClearForm = () => {
-    setScoreDate(new Date());
+    setFormData({ score_value: 0, score_date: new Date() });
     ClearValidation();
     ClearActiveScore();
-  };
-
-  const HandleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
-    const formData = GatherFormData();
-
-    const formIsValid = ValidateForm(formData);
-
-    if (!formIsValid) {
-      return;
-    }
-
-    ClearValidation();
-    //const message = await CreateScore(formData);
-    //ShowSuccessMessage(message);
-    ClearForm();
   };
 
   const HandleScoreClick = (score: PossibleScore) => {
@@ -113,6 +94,7 @@ const Upload: NextPage = () => {
     );
 
     setPossibleScores(updateScore);
+    setFormData({ ...formData, score_value: score.score });
   };
 
   const ClearActiveScore = () => {
@@ -122,33 +104,39 @@ const Upload: NextPage = () => {
     }));
 
     setPossibleScores(clearedScores);
+    setFormData({ ...formData, score_value: 0 });
   };
 
-  const GetActiveScore = () => {
-    let activeScore = 0;
-    possibleScores.forEach((score) => {
-      if (score.isActive) {
-        activeScore = score.score;
-      }
-    });
+  const FlashSuccessMessage = () => {
+    //Flash success message and then hide after 5 seconds
+    setTimeout(() => {
+      ClearSuccessMessage();
+    }, 5000);
+  };
 
-    return activeScore;
+  const ClearSuccessMessage = () => {
+    setsuccessMessage({ color: "", message: "" });
   };
 
   return (
     <>
       <div className="ml-4 mt-4">
         {/* <h1 className="text-2xl">Upload Score</h1> */}
-        <span>{successMessage}</span>
-        <form onSubmit={HandleSubmit} className="text-light">
+        <SuccessMessage
+          message={successMessage.message}
+          color={successMessage.color}
+        />
+        <form className="text-light">
           <div className="mb-3 w-1/4">
             <label htmlFor="scoreDate">
               What date are you logging this score for?
             </label>
             <DatePicker
               id="scoreDate"
-              selected={scoreDate}
-              onChange={(date: Date) => setScoreDate(date)}
+              selected={formData.score_date}
+              onChange={(date: Date) =>
+                setFormData({ ...formData, score_date: date })
+              }
             />
             <span style={{ color: "red" }}>{errors.scoreDateError}</span>
           </div>
@@ -177,8 +165,14 @@ const Upload: NextPage = () => {
               Clear
             </button>
             <button
-              type="submit"
+              type="button"
               className="rounded bg-slate-900 py-2 px-4 font-bold text-white"
+              onClick={() =>
+                addScore.mutate({
+                  score_value: formData.score_value,
+                  score_date: formData.score_date,
+                })
+              }
             >
               Upload
             </button>
