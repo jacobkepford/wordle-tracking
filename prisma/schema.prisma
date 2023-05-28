@@ -14,8 +14,8 @@ generator client {
 model Score {
     score_id    Int      @id @default(autoincrement())
     score_value Int
-    score_user  Int
-    score_date  DateTime @db.Date
+    score_user  String   @unique
+    score_date  DateTime @unique @db.Date
     create_date DateTime @default(now())
 
     @@index([score_user])
