@@ -19,7 +19,7 @@ const Home: NextPage = () => {
               <h2>Upload Scores &rarr;</h2>
               <p>Upload your score to the tracker</p>
             </Link>
-            <Link href="/userscore/1" className={styles.card}>
+            <Link href="/userscores" className={styles.card}>
               <h2>View Scores &rarr;</h2>
               <p>View a chart of your uploaded scores</p>
             </Link>
@@ -30,7 +30,6 @@ const Home: NextPage = () => {
           </div>
         </>
       </main>
-      
     </div>
   );
 };

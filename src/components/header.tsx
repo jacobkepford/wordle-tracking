@@ -30,9 +30,9 @@ export const Header = () => {
           Upload
         </Link>
         <Link
-          href="/userscore"
+          href="/userscores"
           className={`text-1xl rounded px-4 py-4 hover:bg-slate-800 ${
-            routerPath == "/userscore" ? "active" : ""
+            routerPath == "/userscores" ? "active" : ""
           }`}
         >
           Your Scores

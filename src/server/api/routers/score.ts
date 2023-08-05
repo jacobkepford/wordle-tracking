@@ -24,7 +24,23 @@ export const scoreRouter = createTRPCRouter({
         }
       ); 
     }),
+
   getAll: publicProcedure.query(({ ctx }) => {
     return ctx.prisma.score.findMany();
   }),
+
+  getUserScores: privateProcedure.query(async({ctx}) => {
+    const userScoreData = [0, 0, 0, 0, 0, 0];
+    
+    const scores = await ctx.prisma.score.findMany({
+      select: {score_value: true},
+      where: {score_user: ctx.userId}
+    })
+
+    scores.forEach((score) => {
+      userScoreData[score.score_value - 1]++;
+    });
+
+    return userScoreData;
+  })
 });
