@@ -10,6 +10,7 @@ import {
 } from "chart.js";
 import { api } from "~/utils/api";
 import { useUser } from "@clerk/nextjs";
+import { LoadingSpinner } from "~/components/loadingSpinner";
 
 ChartJS.register(
   CategoryScale,
@@ -21,14 +22,15 @@ ChartJS.register(
 );
 
 const UserScore = () => {
-  const scores = api.score.getUserScores.useQuery();
+  const { data: scores, isLoading } = api.score.getUserScores.useQuery();
+  const total = scores?.reduce((acc, curr) => acc + curr, 0);
   const user = useUser();
   const chartData = {
     labels: ["One", "Two", "Three", "Four", "Five", "Six"],
     datasets: [
       {
         label: "Score",
-        data: scores.data?.map((score) => score),
+        data: scores?.map((score) => score),
         backgroundColor: [
           "#665645",
           "#ffffff",
@@ -42,23 +44,26 @@ const UserScore = () => {
   };
   return (
     <>
-      <div className="text-center">
-        {user.user?.firstName}, here are your scores:
-        <h2 className="mb-3">{`Total: ${scores.data?.length}`}</h2>
-        <div className="w-50 mx-auto">
-          <Bar
-            data={chartData}
-            options={{
-              indexAxis: "y",
-              plugins: {
-                legend: {
-                  display: false,
+      {isLoading && <LoadingSpinner />}
+      {!isLoading && (
+        <div className="mt-4 text-center">
+          {user.user?.firstName}, here are your scores:
+          <h2 className="mb-3">{`Total: ${total}`}</h2>
+          <div className="mx-auto h-3/6 w-3/6">
+            <Bar
+              data={chartData}
+              options={{
+                indexAxis: "y",
+                plugins: {
+                  legend: {
+                    display: false,
+                  },
                 },
-              },
-            }}
-          />
+              }}
+            />
+          </div>
         </div>
-      </div>
+      )}
     </>
   );
 };
