@@ -1,5 +1,6 @@
 import type { NextPage } from "next";
 import { useState } from "react";
+import { LoadingSpinner } from "~/components/loadingSpinner";
 import { SuccessMessage } from "~/components/successMessage";
 import { api } from "~/utils/api";
 
@@ -137,7 +138,8 @@ const PreAuthorize: NextPage = () => {
           </button>
         </div>
       </form>
-      {preAuthUsers.data && (
+      {preAuthUsers.isLoading && <LoadingSpinner />}
+      {preAuthUsers.data && !preAuthUsers.isLoading && (
         <div className="relative mt-4 flex overflow-x-auto">
           <table className="w-full content-center text-left text-sm text-gray-500 dark:text-gray-400">
             <thead className="bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400">

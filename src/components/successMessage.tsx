@@ -1,5 +1,3 @@
-import { useState } from "react";
-
 export type SuccessMessage = {
   message: string;
   color: string;

@@ -23,7 +23,7 @@ ChartJS.register(
 
 const UserScore = () => {
   const { data: scores, isLoading } = api.score.getUserScores.useQuery();
-  const total = scores?.reduce((acc, curr) => acc + curr, 0);
+  const total = scores ? scores.reduce((acc, curr) => acc + curr, 0) : 0;
   const user = useUser();
   const chartData = {
     labels: ["One", "Two", "Three", "Four", "Five", "Six"],
