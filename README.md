@@ -5,7 +5,7 @@ This web application was created for the purpose of providing a dashbboard for o
 ## Technology used to build this application:
 
 - [Next.js](https://nextjs.org)
-- [Clerk.dev Authentication]([https://next-auth.js.org](https://clerk.com/))
+- [Clerk.dev Authentication]([https://clerk.com/)
 - [Prisma](https://prisma.io)
 - [Tailwind CSS](https://tailwindcss.com)
 - [tRPC](https://trpc.io)
